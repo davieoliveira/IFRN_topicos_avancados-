@@ -18,6 +18,7 @@ class Banco:
         
         if not self.contas:
             print("Nenhuma conta cadastrada.")
+        
         for conta in self.contas.values():
             print(conta)
 
@@ -36,9 +37,12 @@ class Banco:
     
     def credito(self, numero, valor):
         conta = self.contas.get(numero)
+
         if not conta:
             print("Conta não encontrada!")
             return False
+        
+        # Garatindo que o valor seja positivo
         if valor <= 0:
             print("Valor de crédito deve ser positivo!")
             return False
@@ -54,9 +58,12 @@ class Banco:
         if not conta:
             print("Conta não encontrada!")
             return False
+
+        # Garatindo que o valor seja positivo
         if valor <= 0:
             print("Valor de débito deve ser positivo!")
             return False
+
         if conta.saldo < valor:
             print("Saldo insuficiente!")
             return False
@@ -72,9 +79,12 @@ class Banco:
         if not conta_origem or not conta_destino:
             print("Uma ou ambas as contas não foram encontradas!")
             return False
+   
+        # Garatindo que o valor seja positivo
         if valor <= 0:
             print("Valor de transferência deve ser positivo!")
             return False
+   
         if conta_origem.saldo < valor:
             print("Saldo insuficiente para transferência!")
        
