@@ -54,9 +54,12 @@ class Banco:
         if not conta:
             print("Conta não encontrada!")
             return False
+
+        # Garantindo que o valor seja positivo.    
         if valor <= 0:
             print("Valor de débito deve ser positivo!")
             return False
+            
         if conta.saldo < valor:
             print("Saldo insuficiente!")
             return False
