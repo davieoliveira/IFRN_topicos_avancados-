@@ -10,15 +10,17 @@ def executar_banco():
         print("4. Débito")
         print("5. Transferência")
         print("6. Ver Contas")
-        print("7. Sair")
+        print("7. Render Juros (Conta Poupança)")
+        print("8. Sair")
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
             try:
                 numero = int(input("Informe o número da conta: "))
-                banco.cadastrar_conta(numero)
+                tipo = input("Tipo da conta (simples/bonus/poupanca): ").lower()
+                banco.cadastrar_conta(numero, tipo)
             except ValueError:
-                print("Número da conta inválido!")
+                print("Dados inválidos!")
 
         elif opcao == "2":
             try:
@@ -40,7 +42,6 @@ def executar_banco():
                 numero = int(input("Informe o número da conta: "))
                 valor = float(input("Informe o valor do débito: "))
                 banco.debito(numero, valor)
-            
             except ValueError:
                 print("Valores inválidos!")
 
@@ -50,7 +51,6 @@ def executar_banco():
                 numero_destino = int(input("Informe o número da conta de destino: "))
                 valor = float(input("Informe o valor da transferência: "))
                 banco.transferencia(numero_origem, numero_destino, valor)
-            
             except ValueError:
                 print("Valores inválidos!")
 
@@ -58,11 +58,18 @@ def executar_banco():
             banco.ver_contas()
 
         elif opcao == "7":
+            try:
+                numero = int(input("Informe o número da conta: "))
+                taxa = float(input("Informe a taxa de juros (%): "))
+                banco.render_juros(numero, taxa)
+            except ValueError:
+                print("Valores inválidos!")
+
+        elif opcao == "8":
             print("Saindo do sistema bancário.")
             break
 
         else:
             print("Opção inválida. Tente novamente.")
-
 
 executar_banco()

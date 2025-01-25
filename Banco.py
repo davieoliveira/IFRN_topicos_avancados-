@@ -1,39 +1,38 @@
-from Conta import Conta
+from Conta import Conta, ContaBonus, ContaPoupanca
 
 class Banco:
     def __init__(self):
-        self.contas = {}  
+        self.contas = {}
 
-    def cadastrar_conta(self, numero):
+    def cadastrar_conta(self, numero, tipo="simples"):
         if numero in self.contas:
             print("Conta já existe!")
             return False
 
-        self.contas[numero] = Conta(numero)
-        
-        print(f"Conta {numero} cadastrada com sucesso.")
+        if tipo == "bonus":
+            self.contas[numero] = ContaBonus(numero)
+        elif tipo == "poupanca":
+            self.contas[numero] = ContaPoupanca(numero)
+        else:
+            self.contas[numero] = Conta(numero)
+
+        print(f"Conta {numero} ({tipo.capitalize()}) cadastrada com sucesso.")
         return True
-    
+
     def ver_contas(self):
-        
         if not self.contas:
             print("Nenhuma conta cadastrada.")
         for conta in self.contas.values():
             print(conta)
 
-        return True
-
     def consultar_saldo(self, numero):
         conta = self.contas.get(numero)
-        
         if not conta:
             print("Conta não encontrada!")
             return None
-        
         print(f"Saldo da conta {numero}: R${conta.saldo:.2f}")
-        
         return conta.saldo
-    
+
     def credito(self, numero, valor):
         conta = self.contas.get(numero)
         if not conta:
@@ -42,15 +41,16 @@ class Banco:
         if valor <= 0:
             print("Valor de crédito deve ser positivo!")
             return False
-        
+
         conta.saldo += valor
-        
+        if isinstance(conta, ContaBonus):
+            conta.adicionar_pontos_deposito(valor)
+
         print(f"Crédito de R${valor:.2f} realizado na conta {numero}.")
         return True
 
     def debito(self, numero, valor):
         conta = self.contas.get(numero)
-        
         if not conta:
             print("Conta não encontrada!")
             return False
@@ -60,7 +60,7 @@ class Banco:
         if conta.saldo < valor:
             print("Saldo insuficiente!")
             return False
-        
+
         conta.saldo -= valor
         print(f"Débito de R${valor:.2f} realizado na conta {numero}.")
         return True
@@ -68,7 +68,7 @@ class Banco:
     def transferencia(self, numero_origem, numero_destino, valor):
         conta_origem = self.contas.get(numero_origem)
         conta_destino = self.contas.get(numero_destino)
-       
+
         if not conta_origem or not conta_destino:
             print("Uma ou ambas as contas não foram encontradas!")
             return False
@@ -77,10 +77,24 @@ class Banco:
             return False
         if conta_origem.saldo < valor:
             print("Saldo insuficiente para transferência!")
-       
             return False
-       
+
         conta_origem.saldo -= valor
         conta_destino.saldo += valor
+        if isinstance(conta_destino, ContaBonus):
+            conta_destino.adicionar_pontos_transferencia(valor)
+
         print(f"Transferência de R${valor:.2f} da conta {numero_origem} para a conta {numero_destino} realizada com sucesso.")
+        return True
+
+    def render_juros(self, numero, taxa):
+        conta = self.contas.get(numero)
+        if not conta:
+            print("Conta não encontrada!")
+            return False
+        if not isinstance(conta, ContaPoupanca):
+            print("Apenas contas poupança podem render juros!")
+            return False
+        conta.render_juros(taxa)
+        print(f"Juros de {taxa:.2f}% aplicados na conta {numero}.")
         return True
