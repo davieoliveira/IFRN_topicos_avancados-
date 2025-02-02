@@ -20,7 +20,9 @@ class Banco:
         
         else:
             self.contas[numero] = Conta(numero)
-
+            # Exigindo saldo inicial rel- 1.3.1
+            valor_inicial = float(input("Qual o saldo inicial da conta? "))
+            self.contas[numero].saldo = valor_inicial
 
         print(f"Conta {numero} ({tipo.capitalize()}) cadastrada com sucesso.")
         return True
