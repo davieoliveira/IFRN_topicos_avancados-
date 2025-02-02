@@ -16,7 +16,7 @@ class ContaBonus(Conta):
         self.pontuacao += int(valor // 100)
 
     def adicionar_pontos_transferencia(self, valor):
-        self.pontuacao += int(valor // 200)
+        self.pontuacao += int(valor // 150)
 
     def __str__(self):
         return super().__str__() + f" | Pontuação: {self.pontuacao}"
