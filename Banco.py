@@ -4,7 +4,7 @@ class Banco:
     def __init__(self):
         self.contas = {}
 
-    def cadastrar_conta(self, numero, tipo="simples"):
+    def cadastrar_conta(self, numero, tipo='simples'):
         if numero in self.contas:
             print("Conta já existe!")
             return False
@@ -17,8 +17,10 @@ class Banco:
             # Exigindo saldo inicial rel- 1.3
             valor_inicial = float(input("Qual o saldo inicial da conta? "))
             self.contas[numero].saldo = valor_inicial
+        
         else:
             self.contas[numero] = Conta(numero)
+
 
         print(f"Conta {numero} ({tipo.capitalize()}) cadastrada com sucesso.")
         return True
@@ -59,6 +61,7 @@ class Banco:
 
     def debito(self, numero, valor):
         conta = self.contas.get(numero)
+        
         if not conta:
             print("Conta não encontrada!")
             return False
@@ -70,6 +73,11 @@ class Banco:
 
         if conta.saldo < valor:
             print("Saldo insuficiente!")
+            return False
+
+        # Garantindo que o saldo da conta n seja menor que -1000
+        if not isinstance(conta, ContaPoupanca) and (conta.saldo - valor) < -1000:
+            print("Erro: Contas que não são poupança não podem ter saldo abaixo de -1000.")
             return False
 
         conta.saldo -= valor
@@ -89,6 +97,12 @@ class Banco:
             print("Valor de transferência deve ser positivo!")
             return False
    
+        # Garantindo que o saldo da conta n seja menor que -1000
+        if not isinstance(Conta, ContaPoupanca) and (numero_origem.saldo - valor) < -1000:
+            print("Erro: Contas que não são poupança não podem ter saldo abaixo de -1000.")
+        
+        return False
+
         if conta_origem.saldo < valor:
             print("Saldo insuficiente para transferência!")
             return False
